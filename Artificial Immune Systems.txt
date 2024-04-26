@@ -1,0 +1,45 @@
+#Artificial Immune System for Damage Classification
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import accuracy_score
+from sklearn.model_selection import train_test_split
+from sklearn import datasets
+
+# Load Iris dataset from sklearn.datasets
+iris = datasets.load_iris()
+X = iris.data  # Features (sepal length, sepal width, petal length, petal width)
+y = iris.target  # Target variable (species)
+
+# Split the dataset into training and testing sets using train_test_split
+# 50% of the data will be used for testing
+# random_state=42 ensures reproducibility of the split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=42)
+
+# Artificial Immune System (AIS) Classifier
+class AISClassifier:
+    def __init__(self, n_neighbors=10):
+        # Initialize K-Nearest Neighbors classifier with given number of neighbors
+        self.knn = KNeighborsClassifier(n_neighbors=n_neighbors)
+    
+    def fit(self, X_train, y_train):
+        # Fit the KNN classifier to the training data
+        self.knn.fit(X_train, y_train)
+    
+    def predict(self, X_test):
+        # Make predictions using the trained KNN classifier
+        return self.knn.predict(X_test)
+
+# Create an instance of AISClassifier with 10 neighbors
+ais_clf = AISClassifier(n_neighbors=10)
+
+# Train the AIS classifier using the training data
+ais_clf.fit(X_train, y_train)
+
+# Make predictions on the test data
+y_pred = ais_clf.predict(X_test)
+
+# Calculate the accuracy of the predictions
+# Accuracy is the fraction of correctly classified instances
+accuracy = accuracy_score(y_test, y_pred)
+
+# Print the accuracy of the classifier
+print("Accuracy:", accuracy)
